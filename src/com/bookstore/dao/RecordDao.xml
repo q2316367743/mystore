@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookstore.dao.RecordDao">
+
+	<select id="queryAllRecordByUserId" resultType="com.bookstore.po.Commodity">
+		select * from commodity
+		where id in (
+			select commodity_id from record
+			where user_id = #{userId}
+		)
+	</select>
+	
+	<insert id="saveRecord">
+		insert into record(user_id, commodity_id)
+		values(#{userId}, #{commodityId})
+	</insert>
+	
+	<delete id="deleteRecordByUserId">
+		delete from record where user_id = #{userId}
+	</delete>
+	
+	<select id="recordExist" resultType="INTEGER">
+		select 1 from record
+		where commodity_id = #{commodityId} and user_id = #{userId}
+	</select>
+
+</mapper>

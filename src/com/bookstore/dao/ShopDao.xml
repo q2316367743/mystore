@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookstore.dao.ShopDao">
+
+	<resultMap type="com.bookstore.po.Shop" id="shopMap">
+		<id property="id" column="id" jdbcType="INTEGER" javaType="INTEGER"/>
+		<result property="userId" column="user_id" jdbcType="INTEGER" javaType="INTEGER"/>
+		<result property="commodityId" column="commodity_id" jdbcType="INTEGER" javaType="INTEGER"/>
+	</resultMap>
+	
+	<select id="queryAllShopByUserId" resultType="com.bookstore.po.Commodity">
+		select * from commodity
+		where id in (
+			select commodity_id from shop
+			where user_id = #{userId}
+			group by commodity_id
+		)
+	</select>
+	
+	<insert id="saveShop">
+		insert into shop(user_id, commodity_id)
+		values(#{userId}, #{commodityId})
+	</insert>
+	
+	<delete id="deleteShopByUserId">
+		delete from shop where user_id = #{userId}
+	</delete>
+	
+	<delete id="deleteShopByUIACI">
+		delete from shop where user_id = #{userId} and commodity_id = #{commodityId}
+	</delete>
+
+</mapper>
